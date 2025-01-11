@@ -1,0 +1,44 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.button {
+    background-color: #ffb107; /* Gold */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #e0a800; /* Slightly darker gold */
+}
+
+.container {
+    width: 100%; /* Use full width */
+    max-width: 1200px; /* Optional, for larger screens */
+    margin: 0 auto;
+    padding: 0 20px; /* Side padding */
+    box-sizing: border-box; /* Ensures padding is included in the width */
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}

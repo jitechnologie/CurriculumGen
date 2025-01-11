@@ -1,0 +1,7 @@
+Flask
+PyPDF2
+python-docx
+werkzeug
+google-generativeai  # Adjust to the specific version you are using
+python-dotenv
+gunicorn

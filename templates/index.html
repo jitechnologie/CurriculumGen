@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-html.min.js"></script>
+
+    <!-- Prism.js CSS for Dark Theme -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+
+    <!-- Prism.js Core Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+
+    <!-- Additional Languages (e.g., C++) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
+
+
+    <title>CurriculumGen</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #f1f1f1;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            
+        }
+    
+        .header {
+            background-color: #1f1f1f;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            width: 100%;
+        }
+    
+        .header img {
+            width: 40px;
+            height: 50px;
+        }
+    
+        .header h1 {
+            font-size: 1.5rem;
+            color: #00bcd4;
+            margin: 0;
+            flex: 1;
+            text-align: center;
+        }
+    
+        .header h2 {
+            font-size: 1rem;
+            color: #f1f1f190;
+            margin: 0;
+        }
+
+    
+        .footer {
+            background-color: #1f1f1f;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 100%;
+        }
+
+        .copy-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+            cursor: pointer;
+            color: #e2e2e295;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .copy-icon:hover {
+            color: #06e0f0;
+        }
+    
+        #chatbox {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            margin: 10px;
+            padding: 20px;
+            overflow-y: auto;
+            background-image: url("{{ url_for('static', filename='back.jpg') }}");
+            background-size: cover; /* Adjusts the size of the background */
+            background-position: center center; /* Centers the image in the chatbox */
+            background-repeat: no-repeat;
+            border-top: 1px solid #333;
+            border-bottom: 1px solid #333;
+            width: 95%;
+        }
+    
+        .chat-message {
+            max-width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+    
+        .chat-message.user {
+            background-color: #1e88e5;
+            color: #fff;
+            align-self: flex-end;
+            border-radius: 15px 15px 0 15px;
+        }
+    
+        .chat-message.bot {
+            background-color: #424242;
+            color: #f1f1f1;
+            align-self: flex-start;
+            border-radius: 15px 15px 15px 0;
+        }
+    
+        #input-container {
+            width: 100%;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background-color: #1f1f1f;
+        }
+    
+        #userInput {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #00bcd4;
+            border-radius: 20px;
+            background-color: #333;
+            color: #fff;
+            font-size: 1rem;
+            width: 100%;
+        }
+    
+        #userInput:focus {
+            outline: none;
+            border-color: #00bcd4;
+        }
+    
+        .button {
+            background-color: #00bbd44b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+    
+        .button:hover {
+            background-color: #06bcd0;
+        }
+    
+        .attach-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            color: white;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: background-color 0.3s;
+        }
+    
+        .attach-icon:hover {
+            background-color: #0097a7;
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+    
+        table, th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+    
+        th {
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+        }
+    
+        td {
+            background-color: #ffffff;
+        }
+
+        pre {
+            background-color: #1e1e1e; /* Dark background */
+            color: #0fe81e;           /* Light text color */
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;         /* Horizontal scroll for long code */
+            font-family: 'Courier New', Courier, monospace; /* Monospace font */
+        }
+
+        /* Ensure <code> inherits the style */
+        pre code {
+            display: block;
+        }
+
+        /* Add some spacing between text and code blocks */
+        p + pre {
+            margin-top: 10px;
+        }
+
+
+
+        #fileInput {
+              display: none;     /* Hide the default file input */
+        }
+    
+        .math-output {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #333;
+            color: #00e676;
+            padding: 8px;
+            border-radius: 8px;
+            display: inline-block;
+        }
+    
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.2rem;
+            }
+    
+            #input-container {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+    
+            #userInput {
+                font-size: 0.9rem;
+            }
+    
+            .button {
+                font-size: 0.9rem;
+                padding: 8px 15px;
+            }
+        }
+
+        #logo-img{
+            width: 350px;
+            height: 100px;
+        }
+
+        .loading-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #f1f1f1;
+        }
+
+        .dot {
+            animation: breathing 1.5s infinite ease-in-out;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes breathing {
+            0%, 20% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100% {
+                opacity: 0.2;
+                transform: scale(1);
+            }
+        }
+        
+        .loading-animation {
+    background-color: #424242;
+    color: #f1f1f1;
+    align-self: flex-start;
+    border-radius: 15px 15px 15px 0;
+    padding: 10px;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+}
+
+.loading-text {
+    animation: breathe 1.5s infinite;
+    color: #00bcd4;
+}
+
+@keyframes breathe {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+}
+
+    </style>
+    
+</head>
+<body>
+    <div class="header">
+        
+        <img src="{{ url_for('static', filename='s-logo.png') }}" alt="Logo" id="logo-img">
+    </div>
+    
+    <div id="chatbox">
+        <div id="loadingAnimation" style="display: none;" class="chat-message bot">
+            <span class="loading-text"><span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></span>
+        </div>
+        
+    </div>
+
+    <div id="input-container">
+        <input type="text" id="userInput" placeholder="Type your message here..." />
+        <button onclick="sendMessage()" class="button"><i class="fa-sharp-duotone fa-solid fa-paper-plane"></i></button>
+        <label for="fileInput" class="attach-icon">
+            <i class="fas fa-paperclip"></i>
+        </label>
+        <input type="file" id="fileInput"/>
+        <button onclick="uploadFile()" class="button">Upload</button>
+    </div>
+
+    
+
+    <div class="footer">
+        <p>&copy; 2025 JI Technologies. All rights reserved.</p><br><br>
+        <a href="">Privacy and Policy</a>
+    </div>
+
+    <script>
+        // Handle 'Enter' key press to send message
+        document.getElementById('userInput').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    
+    // user message
+    function sendMessage() {
+        const userInput = document.getElementById('userInput').value.trim();
+        if (userInput) {
+            document.getElementById('userInput').value = '';
+
+            appendMessage(userInput, 'user');
+            showLoadingAnimation(); // Show the loading animation
+
+            fetch('/chat', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ user_input: userInput })
+})
+    .then(response => response.json())
+    .then(data => {
+        removeLoadingAnimation(); // Ensure animation is cleared before showing the response
+        const response = data.response;
+
+        if (data.table) {
+            const tableHTML = generateTableHTML(data.table);
+            appendMessage(tableHTML, 'bot');
+        } else {
+            appendMessage(formatResponse(response), 'bot');
+        }
+    })
+    .catch(error => {
+        removeLoadingAnimation(); // Always remove animation on error
+        appendMessage('Error: Unable to get a response.', 'bot');
+        console.error(error);
+    });
+
+        }
+    }
+
+    function showLoadingAnimation() {
+    const existingLoadingElement = document.getElementById('loadingAnimation');
+    if (!existingLoadingElement) {
+        const chatbox = document.getElementById('chatbox');
+        const loadingElement = document.createElement('div');
+        loadingElement.className = 'chat-message bot loading-animation';
+        loadingElement.id = 'loadingAnimation';
+        loadingElement.innerHTML = '<span class="loading-text">Generating...</span>';
+
+        chatbox.appendChild(loadingElement);
+        chatbox.scrollTop = chatbox.scrollHeight; // Scroll to the bottom
+    }
+}
+
+
+function removeLoadingAnimation() {
+    try {
+        const loadingElement = document.getElementById('loadingAnimation');
+        if (loadingElement) {
+            loadingElement.remove();
+        }
+    } catch (error) {
+        console.error("Error removing loading animation:", error);
+    }
+}
+
+
+
+    
+        // Function to append a new message to the chatbox
+        function appendMessage(message, sender) {
+        const chatbox = document.getElementById('chatbox');
+        const messageElement = document.createElement('div');
+        messageElement.className = `chat-message ${sender}`;
+
+        if (sender === 'bot') {
+            const botMessageContainer = document.createElement('div');
+            botMessageContainer.innerHTML = message;
+
+            const copyIcon = document.createElement('i');
+            copyIcon.className = 'fas fa-copy copy-icon';
+            copyIcon.title = 'Copy to clipboard';
+            copyIcon.addEventListener('click', () => copyToClipboard(botMessageContainer.innerHTML));
+
+            botMessageContainer.appendChild(copyIcon);
+            messageElement.appendChild(botMessageContainer);
+        } else {
+            messageElement.innerHTML = message;
+        }
+
+        chatbox.appendChild(messageElement);
+        chatbox.scrollTop = chatbox.scrollHeight; // Auto-scroll to the latest message
+    }
+
+
+    
+        // Generate HTML for a table
+        function generateTableHTML(tableData) {
+            const tableStyle = "width: 100%; border-collapse: collapse; border: 1px solid #000;";
+            const thStyle = "border: 1px solid #000; background-color: #ffffff; color: black; padding: 8px;";
+            const tdStyle = "border: 1px solid #000; padding: 8px; background-color: #ffffff; color: black;";
+
+            let table = `<table style="${tableStyle}"><thead><tr>`;
+            tableData.headers.forEach(header => {
+                table += `<th style="${thStyle}">${header}</th>`;
+            });
+            table += '</tr></thead><tbody>';
+            tableData.rows.forEach(row => {
+                table += '<tr>';
+                row.forEach(cell => {
+                    table += `<td style="${tdStyle}">${cell}</td>`;
+                });
+                table += '</tr>';
+            });
+            table += '</tbody></table>';
+            return table;
+        }
+
+        function formatResponse(response) {
+            // Regex to detect code blocks with optional language tag
+            const codeBlockRegex = /```(.*?)\n([\s\S]*?)```/g;
+
+            // Process the response to handle code blocks
+            const formattedResponse = response.replace(codeBlockRegex, (match, language, code) => {
+                // Trim and sanitize the language tag
+                const lang = language.trim().toLowerCase() || 'plaintext';
+
+                // Escape HTML special characters in the code block
+                const escapedCode = code
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#39;');
+
+                // Wrap code in <pre><code> for syntax highlighting
+                return `<pre><code class="language-${lang}">${escapedCode}</code></pre>`;
+            });
+
+            // Process inline formatting (bold, italic, line breaks)
+            const styledResponse = formattedResponse
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') // Bold (e.g., **bold**)
+                .replace(/(?<!\\)\*(.*?)\*(?!\*)/g, '<em>$1</em>') // Italic (e.g., *italic*)
+                .replace(/\n/g, '<br>'); // Line breaks
+
+            // Return the final formatted response
+            return styledResponse;
+        }
+
+
+
+    
+        // Handle file uploads
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            
+            if (file) {
+                const formData = new FormData();
+                formData.append('file', file);
+            
+    
+                fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+        
+                    appendMessage(data.response, 'bot');
+                })
+                .catch(error => {
+                    appendMessage('Error uploading file: ' + error.message, 'bot');
+                    console.error('Upload error:', error);
+                });
+            } else {
+                appendMessage('No file selected.', 'bot');
+            }
+        }
+    
+        // Auto-focus on the input field for better usability
+        window.onload = function() {
+            document.getElementById('userInput').focus();
+        };
+    
+        // Responsive handling for resizing events
+        window.onresize = function() {
+            const chatbox = document.getElementById('chatbox');
+            chatbox.scrollTop = chatbox.scrollHeight; // Ensure chat stays scrolled to the bottom
+        };
+
+        function copyToClipboard(htmlContent) {
+    // Use the Clipboard API to write HTML content to the clipboard
+            if (navigator.clipboard && navigator.clipboard.write) {
+                const blob = new Blob([htmlContent], { type: 'text/html' });
+                const data = [new ClipboardItem({ 'text/html': blob })];
+                
+                navigator.clipboard.write(data).then(() => {
+                    alert('Response copied with layout preserved!');
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    alert('Failed to copy response.');
+                });
+            } else {
+                // Fallback for browsers that do not support Clipboard API
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlContent;
+                document.body.appendChild(tempDiv);
+                
+                const range = document.createRange();
+                range.selectNodeContents(tempDiv);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+
+                document.execCommand('copy');
+                document.body.removeChild(tempDiv);
+
+                alert('Response copied with layout preserved!');
+            }
+        }
+
+
+    </script>
+    
+</body>
+</html>
