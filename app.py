@@ -33,7 +33,7 @@ generation_config = {
 }
 
 model = genai.GenerativeModel(
-    model_name="gemini-1.5-flash",
+    model_name="models/gemini-2.5-flash",
     generation_config=generation_config,
     safety_settings=[
         {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "HIGH"},
@@ -205,4 +205,5 @@ def upload_file():
 
 
 if __name__ == "__main__":
+
     app.run(debug=True)
